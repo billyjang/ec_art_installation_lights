@@ -88,6 +88,6 @@ uint32_t Wheel(byte WheelPos) {
 void loop() {
  
   soundToColor(20, listen());
-  delay(20);
+  delay(5000);
   
 }
