@@ -1,10 +1,10 @@
 #include <Adafruit_NeoPixel.h>
 #ifdef __AVR__
-  #include <avr/power.h>
+#include <avr/power.h>
 #endif
 
 #define PIN 2
-#define WINDOW 2000
+#define WINDOW 50
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(12, PIN, NEO_GRBW + NEO_KHZ800);
 
 void setup() {
@@ -23,9 +23,9 @@ void soundToColor(uint8_t wait, float sound){
    
   for(int i=0; i<strip.numPixels(); i++) { //loop through all the pixels
       strip.setPixelColor(i, Wheel(sound));
+      delay(wait);
+      strip.show();
     }
-    strip.show();
-    delay(wait);
 }
 
 
@@ -33,7 +33,6 @@ void soundToColor(uint8_t wait, float sound){
 float listen(){
    /*
    * Code below reads the voltage from the microphone and converts it to a color (0 - 255)
-   * 
    */
   int count = 0;
   int max_val = -1;
@@ -46,7 +45,12 @@ float listen(){
     int sensorValue = analogRead(A5);
   
     // Convert the analog reading (which goes from 0 - 1023) to a color (0 - 255):
-    float sound = sensorValue * (5.0 / 1023.0);
+    float sound = sensorValue * (255.0 / 1023.0);
+
+    // print out the value you read:
+    Serial.println(sound);
+
+    
     if(sound > max_val) {
       max_val = sound;
     }
@@ -56,18 +60,27 @@ float listen(){
     mvg_avg = mvg_avg + (sound - mvg_avg)/count;
     
   }
+
+  //place while loop that runs for half of a second to only get regional max and mins
   
-  return mvg_avg;
+//  return mvg_avg;
+
+
   //IMPORTANT: We need to normalize any of the values that we use with a suitable normalizer. 
   //return max_val - mvg_avg;
   //return max_val - min_val;
-  //return max_val;
+  return max_val;
+
+
+
+//maybe this will be interesting: 
+//return (mvg_avg + max_val)/2;
 }
 
 
 
 uint32_t Wheel(byte WheelPos) {
-  /*
+/*
  * Wheel transforms a number 0 to 255 to a color
  * Input a value 0 to 255 to get a color value.
  * The colours are a transition r - g - b - back to r.
@@ -87,7 +100,7 @@ uint32_t Wheel(byte WheelPos) {
 
 void loop() {
  
-  soundToColor(20, listen());
-  delay(5000);
+  soundToColor(75, listen());
+//  delay(2500);
   
 }
