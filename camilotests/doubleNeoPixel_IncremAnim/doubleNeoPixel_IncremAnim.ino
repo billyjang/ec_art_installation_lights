@@ -3,7 +3,7 @@
 #include <avr/power.h>
 #endif
 
-#define NUM_LEDS 24
+#define NUM_LEDS 48
 
 #define PIN 2
 #define WINDOW 20
