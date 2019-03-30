@@ -5,7 +5,7 @@
 #endif
 
 #define PIN 2
-#define num_neoPixels 1 // change depending on num of neoPixels
+#define num_neoPixels 19 // change depending on num of neoPixels
 #define num_leds num_neoPixels*12
 
 Adafruit_VL53L0X lox = Adafruit_VL53L0X(); //our precious LIDAR sensor
@@ -32,19 +32,28 @@ void setup() {
 
   strip.begin();
   strip.setBrightness(50);
+  initialize();
   strip.show(); // Initialize all pixels to 'off'
+}
+
+void initialize() {
+  for(int i=0; i<num_leds; i++) {
+    strip.setPixelColor(i, 50, 0, 50, 0);
+  }
+  strip.show();
 }
 
 void distanceToColor(uint8_t wait, float distance){
   /*
    * takes a number 0-255 and loops through all the pixels to set them to that color
    */
-   
-  for(int i=0; i<num_leds; i++) { //loop through all the pixels
-      strip.setPixelColor(i, Wheel(distance));
-    }
-    strip.show();
-    delay(wait);
+  for(int i=num_leds-1; i>=1; i--) { //loop through all the pixels
+      uint32_t color = strip.getPixelColor(i-1);
+      strip.setPixelColor(i, color);
+  }
+  strip.setPixelColor(0, Wheel(distance));
+  strip.show();
+  delay(wait);
 }
 
 float look(){
@@ -68,11 +77,14 @@ float look(){
         distance = 0;
     }
 
-    Serial.print("Distance (mm): "); Serial.println(distance);
+    //Serial.print("Distance (mm): "); Serial.println(distance);
     
     // Convert the analog reading (which goes from 0 - 500 mm) to a color (0 - 255):
-    float value = distance * (255.0 / 500);
-    
+    float value = 0.0;
+    if(distance > 0 && distance < 500) {
+      float value = distance * (255.0 / 500);
+    }
+
     return value;  
 }
 
@@ -95,8 +107,7 @@ uint32_t Wheel(byte WheelPos) {
 }
 
 void loop() {
-
-  distanceToColor(20, look());
-  delay(100);
+  distanceToColor(10, look());
+  delay(10);
   
 }

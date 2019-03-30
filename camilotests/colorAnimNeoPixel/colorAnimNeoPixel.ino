@@ -3,7 +3,7 @@
 #include <avr/power.h>
 #endif
 
-#define num_pixels 1
+#define num_pixels 19
 #define NUM_LEDS 12*num_pixels
 
 #define PIN 2
@@ -55,6 +55,6 @@ uint32_t Wheel(byte WheelPos) {
 
 void loop() {
   
-  colorAnim(40);
+  colorAnim(0);
   
 }
