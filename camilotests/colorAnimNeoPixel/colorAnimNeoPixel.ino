@@ -23,10 +23,10 @@ void colorAnim(uint8_t wait){
   /*
    * takes a number 0-255 and loops through all the pixels to set them to that color
    */
-   
+  uint32_t color = Wheel(random(0, 255));
   for(int i=0; i<NUM_LEDS; i++) { //loop through all the pixels
-      strip.setPixelColor(i, Wheel(random(0, 255)));
-      
+      strip.setPixelColor(i, color);
+     
       strip.show();
       
       delay(wait);
@@ -55,6 +55,6 @@ uint32_t Wheel(byte WheelPos) {
 
 void loop() {
   
-  colorAnim(0);
+  colorAnim(10);
   
 }
