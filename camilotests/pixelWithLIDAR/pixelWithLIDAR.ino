@@ -34,12 +34,17 @@ void setup() {
   strip.begin();
   strip.setBrightness(50);
   strip.show();
-  initialize();
-  
+  //initialize();
+ 
   if (!lox.begin()) {
     for(int i = 0; i < num_leds; i++) {
       strip.setPixelColor(i, 50, 0, 0);
+      strip.show();
     }
+  }
+  for(int i = 0; i < num_leds; i++) {
+    strip.setPixelColor(i, 0, 50, 0);
+    strip.show();
   }
 
   //strip.show(); // Initialize all pixels to 'off'
